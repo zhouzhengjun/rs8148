@@ -1,0 +1,4 @@
+
+insmod led_control.ko
+
+mknod /dev/davinci_led c 312 0

@@ -1,0 +1,6 @@
+export DISPLAY=:0
+export LD_LIBRARY_PATH=/opt/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lib:/opt/qtLib/lib
+export QT_PLUGIN_PATH=/opt/qtLib/plugins
+export QT_QPA_PLATFORM=xcb
+export QML2_IMPORT_PATH=
