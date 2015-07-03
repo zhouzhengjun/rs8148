@@ -26,7 +26,8 @@ endif
 
 ifeq ($(OS),Linux)
   dvr_rdk_BASE     := $(shell pwd)/..
-  TI_SW_ROOT       := $(dvr_rdk_BASE)/ti_tools
+#  TI_SW_ROOT       := $(dvr_rdk_BASE)/ti_tools
+  TI_SW_ROOT       := /home/ruisu/dvrrdk-rs8148/ti_tools
 endif
 
 dvr_rdk_PATH     := $(dvr_rdk_BASE)/$(dvr_rdk_RELPATH)

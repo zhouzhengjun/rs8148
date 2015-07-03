@@ -12,12 +12,12 @@ endif
 	$(MAKE) -fMAKEFILE.MK -C../graphic MODULE=videoServer $(TARGET)
 #endif	
 	$(MAKE) -fMAKEFILE.MK -C../display_process MODULE=videoServer $(TARGET)
-	$(MAKE) -fMAKEFILE.MK lib -CBECodec MODULE=videoServer $(TARGET)
+	#$(MAKE) -fMAKEFILE.MK lib -CBECodec MODULE=videoServer $(TARGET)
 
 libs: mcfw_demo 
 
 apps:
-	$(MAKE) -fMAKEFILE.MK -CBECodec MODULE=videoServer $(TARGET)
+#	$(MAKE) -fMAKEFILE.MK -CBECodec MODULE=videoServer $(TARGET)
 
 clean:
 	$(MAKE) -fMAKEFILE.MK libs TARGET=clean
