@@ -1,8 +1,12 @@
 /target/*
 /tftphome/*
 /dvr_rdk/build/*
+/kernel/.*
 *.o
 *.a
+*.so
+/kernel/vmlinux
+/kernel/usr/.*
 *.oem3
 *.sem3
 *.pch
@@ -19,4 +23,7 @@
 *.3
 *.0
 *.1
+*.builtin
+*.order
+*.tmp_*
 *~

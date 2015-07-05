@@ -557,6 +557,35 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
     }
 		ctx->sii9135Handle=sii9135Handle;	
 #endif
+
+		capturePrm.numVipInst = 1;
+		capturePrm.outQueParams[0].nextLink = dupId;
+		capturePrm.tilerEnable				= FALSE;
+		capturePrm.enableSdCrop 			= FALSE;
+
+		pCaptureInstPrm 					= &capturePrm.vipInst[0];
+		pCaptureInstPrm->vipInstId			= SYSTEM_CAPTURE_INST_VIP1_PORTA;
+#ifndef A8_CONTROL_I2C			
+		pCaptureInstPrm->videoDecoderId 	= SYSTEM_DEVICE_VID_DEC_SII9135_DRV;
+#endif	
+		pCaptureInstPrm->inDataFormat		= SYSTEM_DF_YUV422P;
+		pCaptureInstPrm->standard			= videostd;
+		pCaptureInstPrm->numOutput			= 1;
+
+		pCaptureOutPrm						= &pCaptureInstPrm->outParams[0];
+		pCaptureOutPrm->dataFormat			= SYSTEM_DF_YUV422I_YUYV;
+		pCaptureOutPrm->scEnable			= FALSE;
+		pCaptureOutPrm->scOutWidth			= 0;
+		pCaptureOutPrm->scOutHeight 		= 0;
+		pCaptureOutPrm->outQueId			= 0;
+	
+		dupPrm.inQueParams.prevLinkId = captureId;
+		dupPrm.inQueParams.prevLinkQueId= 0;
+		dupPrm.outQueParams[0].nextLink = deiId;
+		dupPrm.outQueParams[1].nextLink = m3out;
+		dupPrm.numOutQue				   = 2;
+		dupPrm.notifyNextLink			   = TRUE;
+
         deiPrm.inQueParams.prevLinkId                        = dupId;
         deiPrm.inQueParams.prevLinkQueId                     = 0;
         deiPrm.outQueParams[DEI_LINK_OUT_QUE_DEI_SC].nextLink               = displayId;
@@ -583,35 +612,7 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
         deiPrm.inputFrameRate[DEI_LINK_OUT_QUE_DEI_SC]  = 60;
         deiPrm.outputFrameRate[DEI_LINK_OUT_QUE_DEI_SC] = 30;
 
-	
-		capturePrm.numVipInst = 1;
-		capturePrm.outQueParams[0].nextLink = dupId;
-		capturePrm.tilerEnable				= FALSE;
-		capturePrm.enableSdCrop 			= FALSE;
-
-		pCaptureInstPrm 					= &capturePrm.vipInst[0];
-		pCaptureInstPrm->vipInstId			= SYSTEM_CAPTURE_INST_VIP1_PORTA;
-#ifndef A8_CONTROL_I2C			
-		pCaptureInstPrm->videoDecoderId 	= SYSTEM_DEVICE_VID_DEC_SII9135_DRV;
-#endif	
-		pCaptureInstPrm->inDataFormat		= SYSTEM_DF_YUV422P;
-		pCaptureInstPrm->standard			= videostd;
-		pCaptureInstPrm->numOutput			= 1;
-
-		pCaptureOutPrm						= &pCaptureInstPrm->outParams[0];
-		pCaptureOutPrm->dataFormat			= SYSTEM_DF_YUV422I_YUYV;
-		pCaptureOutPrm->scEnable			= FALSE;
-		pCaptureOutPrm->scOutWidth			= 0;
-		pCaptureOutPrm->scOutHeight 		= 0;
-		pCaptureOutPrm->outQueId			= 0;
-	
-		dupPrm.inQueParams.prevLinkId = captureId;
-		dupPrm.inQueParams.prevLinkQueId= 0;//DEI_LINK_OUT_QUE_DEI_SC;
-		dupPrm.outQueParams[0].nextLink = deiId;
-		dupPrm.outQueParams[1].nextLink = m3out;
-		dupPrm.numOutQue				   = 2;
-		dupPrm.notifyNextLink			   = TRUE;
-			
+				
 		ipcFramesOutVpssToHostPrm.baseCreateParams.inQueParams.prevLinkId = dupId;
 		ipcFramesOutVpssToHostPrm.baseCreateParams.inQueParams.prevLinkQueId = 1;		
 		ipcFramesOutVpssToHostPrm.baseCreateParams.noNotifyMode = TRUE;
@@ -631,17 +632,17 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 		ipcFramesInHostPrm.cbFxn = frameincallback;
 
 		
-		swMsPrm.inQueParams.prevLinkId = dupId;
-		swMsPrm.inQueParams.prevLinkQueId = 0;
-		swMsPrm.outQueParams.nextLink	  = displayId;
-		swMsPrm.numSwMsInst = 1;
+		//swMsPrm.inQueParams.prevLinkId = dupId;
+		//swMsPrm.inQueParams.prevLinkQueId = 0;
+		//swMsPrm.outQueParams.nextLink	  = displayId;
+		//swMsPrm.numSwMsInst = 1;
 		//	  swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_DEI_SC;
-		swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_SC5;		
-		swMsPrm.maxInputQueLen			  = 4;
+		//swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_SC5;		
+		//swMsPrm.maxInputQueLen			  = 4;
 		swMsPrm.maxOutRes				  = VSYS_STD_1080P_60;
-		swMsPrm.numOutBuf				  = 8;
-		swMsPrm.lineSkipMode			  = FALSE;
-		swMsPrm.layoutPrm.outputFPS 	  = 60;
+		//swMsPrm.numOutBuf				  = 8;
+		//swMsPrm.lineSkipMode			  = FALSE;
+		//swMsPrm.layoutPrm.outputFPS 	  = 60;
 
 		Chains_swMsGenerateLayoutParams(0, 2, &swMsPrm);
 
@@ -670,8 +671,9 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 		//System_linkControl(captureId, CAPTURE_LINK_CMD_CONFIGURE_VIP_DECODERS, NULL, 0, TRUE);
 		//System_linkCreate(sclrId, &sclrPrm, sizeof(sclrPrm));			
 		//System_linkCreate(nsfId	  , &nsfPrm, sizeof(nsfPrm));
+			System_linkCreate(dupId, &dupPrm, sizeof(dupPrm));		
 		System_linkCreate(deiId	  , &deiPrm, sizeof(deiPrm));
-		System_linkCreate(dupId, &dupPrm, sizeof(dupPrm));	
+
 		System_linkCreate(m3out, &ipcFramesOutVpssToHostPrm, sizeof(ipcFramesOutVpssToHostPrm));
 		System_linkCreate(a8in, &ipcFramesInHostPrm, sizeof(ipcFramesInHostPrm));
 	//	System_linkCreate(swMsId   , &swMsPrm, sizeof(swMsPrm));
@@ -698,8 +700,8 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 		System_linkDelete(h->captureId);
 		//System_linkDelete(h->sclrId);				
 		//System_linkDelete(h->nsfId    );
+		System_linkDelete(h->dupId	 );		
 		System_linkDelete(h->deiId    );
-		System_linkDelete(h->dupId	 );
 		System_linkDelete(h->m3out	 );
 		System_linkDelete(h->a8in );	 
 	//	System_linkDelete(h->swMsId	 );

@@ -105,7 +105,7 @@ ROOTDIR := $(dvr_rdk_PATH)
 ifeq ($(DVR_RDK_BOARD_TYPE),DM814X_EVM)
 TARGET_FS_DIR := $(dvr_rdk_PATH)/bin/ti814x
 #TARGET_FS     := $(dvr_rdk_BASE)/target/rfs_814x
-TARGET_FS     := $(dvr_rdk_BASE)/target/rfs_814x
+TARGET_FS     := /home/ruisu/dvrrdk-rs8148/target/rfs_814x
 endif
 
 ifeq ($(DVR_RDK_BOARD_TYPE),DM814X_DVR)
@@ -241,9 +241,11 @@ ifeq ($(DVR_RDK_BOARD_TYPE),DM814X_EVM)
 #LSPDIR        := $(TI_SW_ROOT)/linux_lsp/TI81XX-LINUX-PSP-04.04.00.01
 #KERNELDIR     := $(LSPDIR)/src/kernel/linux-04.04.00.01
 #UBOOTDIR      := $(TI_SW_ROOT)/linux_lsp/TI81XX-LINUX-PSP-04.04.00.01/src/u-boot/u-boot-04.04.00.01
-LSPDIR        := $(TI_SW_ROOT)/linux_lsp/TI81XX-LINUX-PSP-rs8148
-KERNELDIR     := $(LSPDIR)/src/kernel
-UBOOTDIR      := $(LSPDIR)/src/u-boot/
+#LSPDIR        := $(TI_SW_ROOT)/linux_lsp/TI81XX-LINUX-PSP-rs8148
+LSPDIR        := $(dvr_rdk_BASE)
+#KERNELDIR     := $(LSPDIR)/src/kernel
+KERNELDIR     := $(dvr_rdk_BASE)/kernel
+UBOOTDIR      := $(dvr_rdk_BASE)/u-boot
 endif
 
 ifeq ($(DVR_RDK_BOARD_TYPE),DM814X_DVR)
