@@ -504,13 +504,14 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
                                                          &(createArgs),
                                                          &(createStatusArgs));
 
-
+	//usleep(100000);
         vidDecChipIdArgs.deviceNum = 0;
 
         status = Device_sii9135Control(sii9135Handle,
                                            IOCTL_DEVICE_VIDEO_DECODER_GET_CHIP_ID,
                                            &vidDecChipIdArgs,
                                            &vidDecChipIdStatus);
+	//usleep(100000);
         if (status >= 0)
         {
                 videoStatusArgs.channelNum = 0;
@@ -533,13 +534,39 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
                 }
                 else
                 {
-                    printf(" VCAP: SII9135 (0x%02x):  NO Video Detected !!!\n", createArgs.deviceI2cAddr[0]);
-                }
+                    printf(" VCAP: SII9135 (0x%02x):  NO Video Detected !, try again\n", createArgs.deviceI2cAddr[0]);
+#if 1
+			usleep(100000);
+                	status = Device_sii9135Control(sii9135Handle,
+                                               IOCTL_DEVICE_VIDEO_DECODER_GET_VIDEO_STATUS,
+                                               &videoStatusArgs, &videoStatus);
+               		if (videoStatus.isVideoDetect)
+              		{
+				        if(videoStatus.frameInterval==0) videoStatus.frameInterval=1;
+                    			printf(" VCAP: SII9135 (0x%02x): Detected video (%dx%d@%dHz, %d) !!!\n",
+                               		createArgs.deviceI2cAddr[0],
+                               		videoStatus.frameWidth,
+                               		videoStatus.frameHeight,
+                               		1000000 / videoStatus.frameInterval,
+                               		videoStatus.isInterlaced);
+					if(videoStatus.isInterlaced) videostd = DF_STD_1080I_60;
+					else videostd = DF_STD_1080P_60;
+                	}
+			else {
+                    	printf(" VCAP: SII9135 (0x%02x):  NO Video Detected !!!\n", createArgs.deviceI2cAddr[0]);
+
+			Device_sii9135Delete(sii9135Handle, NULL);
+			Device_sii9135DeInit();			
+			System_deInit();	
+			return NULL;
+                	}
+#endif
+		}
         }
         else
         {
                 printf(" VCAP: SII9135 (0x%02x): Device not found !!!\n", createArgs.deviceI2cAddr[0]);
-		}
+	}
 		/* Configure video decoder */
 
         memset(&vidDecVideoModeArgs,0, sizeof(Device_VideoDecoderVideoModeParams));
@@ -877,7 +904,8 @@ void *dfctx;
 	printf("version 0713\n");
 	
   dfctx=dframe_create(1920, 1080, DF_STD_1080P_60);
-  dframe_start(dfctx);
+  if (dfctx !=NULL) dframe_start(dfctx);
+  else return;
     done = FALSE;
   
     while(!done)

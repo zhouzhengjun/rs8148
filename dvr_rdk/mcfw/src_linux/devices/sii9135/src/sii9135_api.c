@@ -154,7 +154,8 @@ Device_Sii9135Handle Device_sii9135Create ( UInt8 drvId,
             vidDecCreateStatus->retVal = -1;
             return NULL;
         }
-		Device_sii9135ResetRegCache(pObj);
+		Device_sii9135Reset (pObj);
+		//Device_sii9135ResetRegCache(pObj);
     }
     /*
      * return driver handle object pointer

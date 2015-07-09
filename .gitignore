@@ -7,6 +7,14 @@
 *.so
 /kernel/vmlinux
 /kernel/usr/.*
+*.IAB
+*.IAD
+*.IMB
+*.IMD
+*.PRI
+*.PS
+*.PFI
+*.PO
 *.oem3
 *.sem3
 *.pch
