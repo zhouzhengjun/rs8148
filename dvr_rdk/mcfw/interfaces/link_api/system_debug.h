@@ -34,7 +34,7 @@
 //#undef SYSTEM_USE_TILER
 #define SYSTEM_USE_TILER
 //#define SYSTEM_USE_VIDEO_DECODER
-#define SYSTEM_DISABLE_AUDIO
+//#define SYSTEM_DISABLE_AUDIO
 #else
 #define SYSTEM_USE_TILER
 #endif

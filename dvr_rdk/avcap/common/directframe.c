@@ -18,6 +18,7 @@
 #include <osa_que.h>
 #include <osa_mutex.h>
 #include <osa_dma.h>
+#include <osa_i2c.h>
 
 #include <mcfw/interfaces/link_api/system_const.h>
 #include <mcfw/interfaces/link_api/system.h>
@@ -58,7 +59,11 @@
 #define DFRAME_SENDRECVFXN_PERIOD_MS                           (8)
 #define DFRAME_MAX_PENDING_RECV_SEM_COUNT                      (5)
 #define DFRAME_QUE_MAX_LEN				             		   (10)
+
+#ifndef SYSTEM_USE_VIDEO_DECODER
 #define A8_CONTROL_I2C
+#endif
+
 
 typedef struct _df_ctx{
 
@@ -477,7 +482,7 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 		
 #ifdef A8_CONTROL_I2C
     {
-        Int32 status = 0;
+        Int32 status = -1;
         Device_VideoDecoderChipIdParams      vidDecChipIdArgs;
         Device_VideoDecoderChipIdStatus      vidDecChipIdStatus;
         VCAP_VIDEO_SOURCE_STATUS_PARAMS_S    videoStatusArgs;
@@ -494,7 +499,7 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 
         memset(&createArgs, 0, sizeof(Device_VideoDecoderCreateParams));
 
-        createArgs.deviceI2cInstId    = 0;
+        createArgs.deviceI2cInstId    = 1;
         createArgs.numDevicesAtPort   = 1;
         createArgs.deviceI2cAddr[0]   = Device_getVidDecI2cAddr(DEVICE_VID_DEC_SII9135_DRV,0);
         createArgs.deviceResetGpio[0] = DEVICE_VIDEO_DECODER_GPIO_NONE;
@@ -504,14 +509,14 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
                                                          &(createArgs),
                                                          &(createStatusArgs));
 
-	//usleep(100000);
+	usleep(100000);
         vidDecChipIdArgs.deviceNum = 0;
 
         status = Device_sii9135Control(sii9135Handle,
                                            IOCTL_DEVICE_VIDEO_DECODER_GET_CHIP_ID,
                                            &vidDecChipIdArgs,
                                            &vidDecChipIdStatus);
-	//usleep(100000);
+	usleep(100000);
         if (status >= 0)
         {
                 videoStatusArgs.channelNum = 0;
@@ -678,13 +683,6 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 		displayPrm.inQueParams[0].prevLinkQueId = DEI_LINK_OUT_QUE_DEI_SC;
 		displayPrm.displayRes				 = swMsPrm.maxOutRes;
 
-	//	System_linkControl(
-	//		SYSTEM_LINK_ID_M3VPSS,
-	//		SYSTEM_M3VPSS_CMD_RESET_VIDEO_DEVICES,
-	//		NULL,
-	//		0,
-	//		TRUE
-	//		);
     UInt32 displayRes[SYSTEM_DC_MAX_VENC] =
         {VSYS_STD_1080P_60,   //SYSTEM_DC_VENC_HDMI,
          VSYS_STD_1080P_60,    //SYSTEM_DC_VENC_HDCOMP,
@@ -896,18 +894,20 @@ static void dframe_deleteFrameThread(df_ctx *thrObj)
 
 #if 1
 #define MAX_INPUT_STR_SIZE 256
+Device_Sii9135CommonObj gDevice;
 int main ( int argc, char **argv )
 {
 void *dfctx;
     Bool done;
     char ch[MAX_INPUT_STR_SIZE];	
 	printf("version 0713\n");
-	
+	//OSA_I2cHndl h;
+	//  OSA_i2cOpen(&(gDevice.i2cHandle), I2C_DEFAULT_INST_ID);
   dfctx=dframe_create(1920, 1080, DF_STD_1080P_60);
   if (dfctx !=NULL) dframe_start(dfctx);
   else return;
     done = FALSE;
-  
+
     while(!done)
     {
       //  Chains_menuMainShow();
@@ -935,9 +935,10 @@ void *dfctx;
         }
 
     }  
+
   dframe_stop(dfctx);
   dframe_delete(dfctx);
-  
+  //	OSA_i2cClose(&(gDevice.i2cHandle));
     return (0);
 }
 #endif

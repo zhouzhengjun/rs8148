@@ -105,59 +105,6 @@
 #define DEVICE_SII9135_AVI_INFO_VERSION_CODE       (0x02)
 #define DEVICE_SII9135_AVI_INFO_PACKET_LENGTH      (0x0D)
 
-#if 0
-/*
-  TVP5158 Object
-*/
-typedef struct
-{
-    Bool   isPalMode;
-    /*palMode to be set based on detect status */
-    Device_VideoDecoderVideoModeParams videoModeParams;
-    /* video mode params */
-    Device_VideoDecoderCreateParams createArgs;
-    /* create time arguments */
-} Device_Tvp5158Obj;
-
-typedef Device_Tvp5158Obj * Device_Tvp5158Handle;
-/*
-  Overall TVP5158 driver object
-*/
-typedef struct
-{
-
-    OSA_I2cHndl i2cHandle;
-    /* i2cHandle for i2c read write operations */
-    Device_Tvp5158Handle tvp5158handle[DEVICE_MAX_HANDLES];
-    /*
-     * TVP5158 handle objects
-     */
-
-} Device_Tvp5158CommonObj;
-
-Device_Tvp5158CommonObj gDevice_tvp5158CommonObj;
-#endif
-
-/*
-  Driver handle object
-*/
-#if 0
-typedef struct
-{
-
-    UInt32 state;               /* handle state */
-
-    UInt32 handleId;            /* handle ID, 0..VPS_DEVICE_MAX_HANDLES-1 */
-
-    Semaphore_Handle lock;      /* handle lock */
-
-    Vps_VideoDecoderCreateParams createArgs;    /* create time arguments  */
-
-    UInt8 regCache[2][256]; /* register read cache */
-
-} Device_Sii9135Obj;
-#endif
-
 typedef struct
 {
     Bool   isPalMode;
@@ -173,23 +120,6 @@ typedef struct
 
 typedef Device_Sii9135Obj * Device_Sii9135Handle;
 
-/*
-  Glabal driver object
-*/
-#if 0
-typedef struct
-{
-    FVID2_DrvOps fvidDrvOps;    /* FVID2 driver ops */
-
-    Semaphore_Handle lock;      /* global driver lock */
-
-    Vps_Sii9135Obj sii9135Obj[VPS_DEVICE_MAX_HANDLES];
-    /*
-     * handle objects
-     */
-
-} Device_Sii9135CommonObj;
-#endif
 typedef struct
 {
 
@@ -215,70 +145,6 @@ typedef struct
 
 Device_Sii9135CommonObj gDevice_sii9135CommonObj;
 
-#if 0
-Int32 Device_tvp5158GetChipId ( Device_Tvp5158Obj * pObj,
-                             Device_VideoDecoderChipIdParams * pPrm,
-                             Device_VideoDecoderChipIdStatus * pStatus );
-
-Int32 Device_tvp5158GetVideoStatus ( Device_Tvp5158Obj * pObj,
-                                     VCAP_VIDEO_SOURCE_STATUS_PARAMS_S * pPrm,
-                                     VCAP_VIDEO_SOURCE_CH_STATUS_S     * pStatus );
-
-Int32 Device_tvp5158Reset ( Device_Tvp5158Obj * pObj );
-
-Int32 Device_tvp5158SetVideoMode ( Device_Tvp5158Obj * pObj,
-                                Device_VideoDecoderVideoModeParams * pPrm );
-
-Int32 Device_tvp5158Start ( Device_Tvp5158Obj * pObj );
-
-Int32 Device_tvp5158Stop ( Device_Tvp5158Obj * pObj );
-
-Int32 Device_tvp5158SetVideoColor ( Device_Tvp5158Obj * pObj,
-                                 Device_VideoDecoderColorParams * pPrm );
-
-Int32 Device_tvp5158SetVideoNf ( Device_Tvp5158Obj * pObj,
-                                 Device_Tvp5158VideoNfParams * pPrm );
-
-Int32 Device_tvp5158RegWrite ( Device_Tvp5158Obj * pObj,
-                            Device_VideoDecoderRegRdWrParams * pPrm );
-
-Int32 Device_tvp5158RegRead ( Device_Tvp5158Obj * pObj,
-                           Device_VideoDecoderRegRdWrParams * pPrm );
-
-Int32 Device_tvp5158OfmReset ( Device_Tvp5158Obj * pObj);
-
-Int32 Device_tvp5158SelectWrite ( Device_Tvp5158Obj * pObj,
-                               UInt32 devId, UInt32 value );
-
-Int32 Device_tvp5158VbusWrite ( Device_Tvp5158Obj * pObj,
-                             UInt32 devId, UInt32 vbusAddr, UInt8 val,
-                             UInt32 len );
-
-Int32 Device_tvp5158VbusRead ( Device_Tvp5158Obj * pObj,
-                            UInt32 devId, UInt32 vbusAddr, UInt8 * val );
-
-Int32 Device_tvp5158PatchDownload ( Device_Tvp5158Obj * pObj, UInt32 devId );
-
-Int32 Device_tvp5158OutputEnable ( Device_Tvp5158Obj * pObj, UInt32 enable );
-
-Int32 Device_tvp5158CheckVideoSettings ( UInt32 interleaveMode,
-                                      UInt32 chMuxNum, UInt32 vidResSel,
-                                      UInt32 outputType );
-
-Int32 Device_tvp5158SetAudioMode ( Device_Tvp5158Obj * pObj,
-                                Device_Tvp5158AudioModeParams * pPrm );
-
-Int32 Device_tvp5158SetAudioVolume ( Device_Tvp5158Obj * pObj,
-                                  UInt32 channelNum, UInt32 audioVolume );
-
-Int32 Device_tvp5158NfEnableAll(Device_Tvp5158Obj * pObj, Bool enable);
-
-Int32 Device_tvp5158PrintChipId ( Device_Tvp5158Obj * pObj);
-
-Int32 Device_tvp5158SetExtendedSettings( Device_Tvp5158Obj * pObj);
-
-Int32 Device_tvp5158SetIndirectRegisters(Device_Tvp5158Obj * pObj);
-#endif
 Int32 Device_sii9135GetChipId ( Device_Sii9135Obj * pObj,
                              Device_VideoDecoderChipIdParams * pPrm,
                              Device_VideoDecoderChipIdStatus * pStatus );

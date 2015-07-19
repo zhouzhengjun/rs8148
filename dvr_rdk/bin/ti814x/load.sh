@@ -14,7 +14,7 @@ cd ./scripts/
 cd -
 
 # load module fb
-insmod ./kermod/vpss.ko i2c_mode=1 mode=hdmi:1080p-60 sbufaddr=${HDVPSS_SHARED_MEM}
+insmod ./kermod/vpss.ko i2c_mode=0 mode=hdmi:1080p-60 sbufaddr=${HDVPSS_SHARED_MEM}
 #insmod ./kermod/vpss.ko i2c_mode=0 mode=hdmi:1080p-60 sbufaddr=${HDVPSS_SHARED_MEM}
 #linux mem should be 384M
 insmod ./kermod/ti81xxfb.ko vram=0:120M,1:4M,2:4M

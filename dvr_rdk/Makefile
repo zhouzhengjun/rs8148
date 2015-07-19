@@ -18,10 +18,16 @@ dvr_rdk_linux:
 	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/mcfw/src_linux
 #	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/rsdemo
 	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/avcap
+	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/h264_enc
+	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/h264_dec
 dvr_rdk_linux_clean:
 	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/mcfw/src_linux clean
 #	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/rsdemo clean
 	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/avcap clean
+	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/h264_enc clean
+	$(MAKE) -fMAKEFILE.MK -C$(dvr_rdk_PATH)/h264_dec clean
+	
+	
 dvr_rdk_linux_all: dvr_rdk_linux_clean dvr_rdk_linux
 
 dvr_rdk_bios6: 

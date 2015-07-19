@@ -192,7 +192,7 @@ Int32 Device_sii9135I2cRead8 ( Device_Sii9135Obj * pObj,
     }
     #else
 	
-	#if 0
+	#if 1
 	r[0]=0x40;
       for(i=0; i<19; i++)
         v[i] = 0;
@@ -244,16 +244,7 @@ Int32 Device_sii9135I2cWrite8 ( Device_Sii9135Obj * pObj,
         pObj->regCache[port][regAddr[reg]] = regValue[reg];
     }
     #endif
-#if 0
-    status = Vps_deviceWrite8(
-                    i2cInstId, i2cDevAddr,
-                    regAddr, regValue,
-                    numRegs
-                    );
 
-    if(status!=FVID2_SOK)
-        return status;
-#endif
 	status = OSA_i2cWrite8(&gDevice_sii9135CommonObj.i2cHandle, 
 								i2cDevAddr, regAddr,
 								regValue, numRegs);
@@ -833,7 +824,6 @@ Int32 Device_sii9135Reset ( Device_Sii9135Obj * pObj )
     /*
      * wait for reset to be effective
      */
-    //Task_sleep ( 50 );
     usleep ( 50000 );
 
     /*
