@@ -1136,7 +1136,7 @@ static void __init ti8148_evm_init(void)
 
 #if defined(CONFIG_MACH_TI8148_BELLLITE)	
 	ti814x_spi_gpio_init();
-	ti814x_mcasp2_pinmux_init();
+//	ti814x_mcasp2_pinmux_init();
 	ti814x_mcasp0_pinmux_init();
 	ti814x_mcasp1_pinmux_init();
 //	ti814x_mcasp4_pinmux_init();
@@ -1150,7 +1150,7 @@ static void __init ti8148_evm_init(void)
 	ti814x_evm_i2c_init();
 //changed  by wangzhaofeng 
 //	ti81xx_register_mcasp(4, &ti8148_evm_snd_data[0]);
-    ti81xx_register_mcasp(2, &ti8148_evm_snd_data[1]);
+  //  ti81xx_register_mcasp(2, &ti8148_evm_snd_data[1]);
 
 	omap2_hsmmc_init(mmc);
 	
