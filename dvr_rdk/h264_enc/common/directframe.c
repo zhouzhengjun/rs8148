@@ -209,11 +209,15 @@ static Void *dframe_ipcBitsRecvFxn(Void * prm)
 		fclose(thrObj->fp);
 	}
 
-	void* dframe_create(int outwidth, int outheight, int videostd)
+	void* dframe_create(int outwidth, int outheight, int videostd,int argc, char **argv)
 		{
     	df_ctx *ctx = (df_ctx*)malloc(sizeof(df_ctx));		
 		if(ctx == NULL) return NULL;
 		char name[20];
+		if(argc>=2){
+			if((ctx->fp=fopen(argv[argc-1],"w"))==NULL)
+				return NULL;
+		}else{
 		fflush(stdout);
 		OSA_printf("\n\nCHAINS:Enter file store name:");
         fflush(stdin);
@@ -222,6 +226,7 @@ static Void *dframe_ipcBitsRecvFxn(Void * prm)
                name);
 		if((ctx->fp=fopen(name,"w"))==NULL)
 			return NULL;
+		}
 
 		DeiLink_CreateParams deiPrm;
 		CaptureLink_CreateParams	capturePrm;
@@ -647,7 +652,7 @@ df_ctx * ctx;
     Bool done;
     char ch[MAX_INPUT_STR_SIZE];
 	printf("**************dframe_create*************\n");
-  dfctx=dframe_create(1920, 1080, VSYS_STD_1080P_60);
+  dfctx=dframe_create(1920, 1080, VSYS_STD_1080P_60,argc,argv);
   //ctx=(df_ctx*)dfctx;
  // ctx->getStart=1;
  printf("**************dframe_start*************\n");

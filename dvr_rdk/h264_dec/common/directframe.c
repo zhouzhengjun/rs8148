@@ -278,11 +278,15 @@ static Void *dframe_ipcBitsSendFxn(Void * prm)
 		fclose(thrObj->fp);
 	}
 
-	void* dframe_create(int outwidth, int outheight, int videostd)
+	void* dframe_create(int outwidth, int outheight, int videostd,int argc, char **argv)
 		{
     	df_ctx *ctx = (df_ctx*)malloc(sizeof(df_ctx));
 		
 		if(ctx == NULL) return NULL;
+		if(argc>=2){
+			if((ctx->fp=fopen(argv[argc-1],"r"))==NULL)
+				return NULL;
+		}else{
 		char name[20];
 		fflush(stdout);
 		OSA_printf("\n\nCHAINS:Enter file store name:");
@@ -292,7 +296,7 @@ static Void *dframe_ipcBitsSendFxn(Void * prm)
                name);
 		if((ctx->fp=fopen(name,"r"))==NULL)
 			return NULL;
-
+		}
 		SwMsLink_CreateParams		swMsPrm;
 		DisplayLink_CreateParams	displayPrm;
 		DupLink_CreateParams		dupPrm;
@@ -416,8 +420,8 @@ static Void *dframe_ipcBitsSendFxn(Void * prm)
 		swMsPrm.inQueParams.prevLinkQueId = 0;
 		swMsPrm.outQueParams.nextLink	  = displayId;
 		swMsPrm.numSwMsInst = 1;
-		swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_VIP1_SC;
-		//swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_SC5;		
+		//swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_VIP1_SC;
+		swMsPrm.swMsInstId[0] = SYSTEM_SW_MS_SC_INST_SC5;		
 		swMsPrm.maxInputQueLen			  = 4;
 		swMsPrm.maxOutRes				  = VSYS_STD_1080P_60;
 		swMsPrm.numOutBuf				  = 8;
@@ -536,7 +540,7 @@ df_ctx * ctx;
     Bool done;
     char ch[MAX_INPUT_STR_SIZE];
 	printf("**************dframe_create*************\n");
-  dfctx=dframe_create(1920, 1080, VSYS_STD_1080P_60);
+  dfctx=dframe_create(1920, 1080, VSYS_STD_1080P_60,argc,argv);
   //ctx=(df_ctx*)dfctx;
  // ctx->getStart=1;
  printf("**************dframe_start*************\n");

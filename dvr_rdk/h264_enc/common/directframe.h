@@ -187,7 +187,7 @@ typedef struct {
 
 typedef void (*df_framein_cb) (void *cbCtx);
 
-void* dframe_create(int outwidth, int outheight, int videostd);
+void* dframe_create(int outwidth, int outheight, int videostd,int argc, char **argv);
 void dframe_delete(void *ctx);
 int dframe_start(void *ctx);
 int dframe_stop(void *ctx);
